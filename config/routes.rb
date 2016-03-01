@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  get 'form' => 'weather#form'
 
-  root 'weather#display'
+  get 'weather/form'
+
+  post 'weather/display'
+
+  root 'weather#form'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

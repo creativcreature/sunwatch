@@ -1,9 +1,18 @@
 class WeatherController < ApplicationController
+
   def form
+
   end
 
   def display
-    response = HTTParty.get("http://api.wunderground.com/api/#{ENV['wunderground_key']}/geolookup/conditions/q/GA/Atlanta.json")
+  	if params[:city] != nil
+  	   params[:city].gsub! " ", "_"
+	end
+    response = HTTParty.get("http://api.wunderground.com/api/#{ENV['wunderground_key']}/geolookup/conditions/q/#{params[:state]}/#{params[:city]}.json")
+    if response['response']['error'] != nil
+    flash[:notice] =  "None such a place!"
+    redirect_to action: :form
+	else
     @res = {city: response['location']['city'],
             state: response['location']['state'],
             country: response['location']['country'],
@@ -14,4 +23,5 @@ class WeatherController < ApplicationController
             wind: response['current_observation']['wind_string'],
             more_link: response['current_observation']['forecast_url']}
     end
+end
 end
